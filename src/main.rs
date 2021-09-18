@@ -1,4 +1,20 @@
 pub mod fake_std {
+    pub mod iter {
+        pub trait Step: Clone + PartialOrd<Self> {
+            fn forward(start: Self, count: usize) -> Self;
+            fn backward(start: Self, count: usize) -> Self;
+        }
+
+        impl Step for usize {
+            fn forward(start: Self, count: usize) -> Self {
+                start + count
+            }
+            fn backward(start: Self, count: usize) -> Self {
+                start - count
+            }
+        }
+    }
+
     pub mod ops {
         pub use std::ops::{
             Bound, Range, RangeFrom, RangeFull, RangeInclusive, RangeTo, RangeToInclusive,
@@ -198,41 +214,28 @@ pub mod fake_std {
                 Included(self.end)
             }
         }
+
+        impl<T> RangeBounds<T> for T
+        where
+            T: crate::fake_std::iter::Step,
+        {
+            fn start_bound(&self) -> Bound<&T> {
+                Included(&self)
+            }
+            fn end_bound(&self) -> Bound<&T> {
+                Included(&self)
+            }
+        }
     }
 }
 
 pub mod fake_nom {
-    use crate::fake_std::ops::{RangeBounds, RangeInclusive};
+    use crate::fake_std::ops::RangeBounds;
 
-    pub trait IntoRangeBounds<T>
+    pub fn many<H>(range: H)
     where
-        T: RangeBounds<usize>,
-    {
-        /// Convert to a RangeBound
-        fn convert(self) -> T;
-    }
-
-    impl<T> IntoRangeBounds<T> for T
-    where
-        T: RangeBounds<usize>,
-    {
-        fn convert(self) -> T {
-            self
-        }
-    }
-
-    impl IntoRangeBounds<RangeInclusive<usize>> for usize {
-        fn convert(self) -> RangeInclusive<usize> {
-            self..=self
-        }
-    }
-
-    pub fn many<G, H>(range: G)
-    where
-        G: IntoRangeBounds<H>,
         H: RangeBounds<usize>,
     {
-        let range = range.convert();
         dbg!((range.start_bound(), range.end_bound()));
     }
 }
