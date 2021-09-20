@@ -1,0 +1,8 @@
+[package]
+name = "rust-proposal"
+version = "0.1.0"
+edition = "2018"
+
+[[bin]]
+name = "rust-proposal"
+path = "main.rs"
