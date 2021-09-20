@@ -24,7 +24,9 @@ See also
 - `nom::multi::many_m_n` for parsing `m..=n` elements
   - `n` being inclusive is also unclear without reading through the documentation and examples
 
-There is a [proposal](https://github.com/Geal/nom/issues/1393) to simplify variants down to a single variant.  See an [example](examples/nom-proposal/main.rs).
+There is a [proposal](https://github.com/Geal/nom/issues/1393) to simplify
+variants down to a single variant.  See an example
+[before](examples/current/main.rs) and [after](examples/nom-proposal/main.rs).
 
 `clap` has a similar problem when describing how many values are associated
 with an argument and is similarly looking at a [proposal to
