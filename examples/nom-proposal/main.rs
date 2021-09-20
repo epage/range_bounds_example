@@ -1,5 +1,4 @@
 pub mod fake_nom;
-pub mod fake_std;
 
 fn main() {
     fake_nom::many(10);

@@ -1,4 +1,4 @@
-use crate::fake_std::ops::{RangeBounds, RangeInclusive};
+use std::ops::{RangeBounds, RangeInclusive};
 
 pub trait IntoRangeBounds<T>
 where
