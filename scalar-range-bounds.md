@@ -6,7 +6,7 @@
 # Summary
 [summary]: #summary
 
-Add an `impl RangeBounds<T> for T: Ord` to allow writing code that can be
+Add an `impl RangeBounds` for integer types to allow writing code that can be
 generic not just over every range type but also integers.
 
 See also
@@ -82,9 +82,7 @@ many(10..);
 
 Add a new impl for `RangeBounds`:
 ```rust
-impl<T> RangeBounds<T> for T
-where
-    T: std::cmp::Ord,
+impl RangeBounds<usize> for usize
 {
     fn start_bound(&self) -> Bound<&T> {
         Included(&self)
@@ -94,8 +92,24 @@ where
     }
 }
 ```
+For
+- `char`
+- `i8`
+- `i16`
+- `i32`
+- `i64`
+- `i128`
+- `isize`
+- `u8`
+- `u16`
+- `u32`
+- `u64`
+- `u128`
+- `usize`
 
-Allowing any `Ord` type to be treated as a range.
+*(list of types inspired by those implementing `std::iter::Step`)*
+
+Allowing any common range bound types to be treated as a range.
 
 # Drawbacks
 [drawbacks]: #drawbacks
@@ -115,9 +129,10 @@ error[E0277]: the trait bound `i32: fake_std::ops::RangeBounds<usize>` is not sa
 ...
 29 |     H: RangeBounds<usize>,
    |        ------------------ required by this bound in `many`
+   |
+   = help: the following implementations were found:
+             <i32 as fake_std::ops::RangeBounds<i32>>
 ```
-- Developers can't provide custom `impl`s for their `Ord` types
-- We might not strike the right balance for what types we `impl` for
 
 # Rationale and alternatives
 [rationale-and-alternatives]: #rationale-and-alternatives
@@ -132,14 +147,19 @@ Alternatives:
   - Conflicts with impl for different range types
   - Clutters docs for unrelated types
   - Developers might unintentionally make too magical / permissive of APIs
+- `impl RangeBounds` for `Ord`
+  - Blanket impls for existing traits is considered a breaking change because people might be implementing them.
 - `impl RangeBounds` for `Step`
+  - Blanket impls for existing traits is considered a breaking change because people might be implementing them.
   - `Step` is required for iterating on a range, so indicative of range-related type
   - `Step` is nightly-only, not allowing crate-authors to opt-in
   - Mapping `N` to `N..=N` assumes `N` is `Eq` but `Step` doesn't guarantee that
   - Might over constrain, there might be types that work with `RangeBounds` but not `Step`
 - `impl RangeBounds` for `PartialOrd`
+  - Blanket impls for existing traits is considered a breaking change because people might be implementing them.
   - Mapping `N` to `N..=N` assumes full equality (`Eq`) rather than partial
 - `impl RangeBounds` for `Eq`
+  - Blanket impls for existing traits is considered a breaking change because people might be implementing them.
   - `Eq` makes sense for `N` for not as a range-type as whole
 - Use `From`
   - For each range type, add `impl<'r, T> From<&'r Range> for (Bound<&'r T>, Bound<&'r T>)`

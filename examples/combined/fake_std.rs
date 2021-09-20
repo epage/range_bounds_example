@@ -220,15 +220,30 @@ pub mod ops {
         }
     }
 
-    impl<T> RangeBounds<T> for T
-    where
-        T: crate::fake_std::cmp::Ord,
-    {
-        fn start_bound(&self) -> Bound<&T> {
-            Included(&self)
-        }
-        fn end_bound(&self) -> Bound<&T> {
-            Included(&self)
-        }
+    macro_rules! range_bounds_scalar {
+        ($ty:ty) => {
+            impl RangeBounds<$ty> for $ty {
+                fn start_bound(&self) -> Bound<&$ty> {
+                    Included(&self)
+                }
+                fn end_bound(&self) -> Bound<&$ty> {
+                    Included(&self)
+                }
+            }
+        };
     }
+
+    range_bounds_scalar!(char);
+    range_bounds_scalar!(i8);
+    range_bounds_scalar!(i16);
+    range_bounds_scalar!(i32);
+    range_bounds_scalar!(i64);
+    range_bounds_scalar!(i128);
+    range_bounds_scalar!(isize);
+    range_bounds_scalar!(u8);
+    range_bounds_scalar!(u16);
+    range_bounds_scalar!(u32);
+    range_bounds_scalar!(u64);
+    range_bounds_scalar!(u128);
+    range_bounds_scalar!(usize);
 }
