@@ -1,3 +1,9 @@
+pub mod cmp {
+    pub trait Ord {}
+
+    impl Ord for usize {}
+}
+
 pub mod iter {
     pub trait Step: Clone + PartialOrd<Self> {
         fn forward(start: Self, count: usize) -> Self;
@@ -216,7 +222,7 @@ pub mod ops {
 
     impl<T> RangeBounds<T> for T
     where
-        T: crate::fake_std::iter::Step,
+        T: crate::fake_std::cmp::Ord,
     {
         fn start_bound(&self) -> Bound<&T> {
             Included(&self)
