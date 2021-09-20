@@ -62,9 +62,9 @@ fn many1() { ... }
 fn many_m_n(m: usize, n: usize) { ... }
 ...
 many0();
-many(10, 10);
-many(0, 10);
-many(10, usize::MAX);
+many_m_n(10, 10);
+many_m_n(0, 10);
+many_m_n(10, usize::MAX);
 ```
 
 You can write:
