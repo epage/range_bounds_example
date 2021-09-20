@@ -141,6 +141,12 @@ Alternatives:
   - Mapping `N` to `N..=N` assumes full equality (`Eq`) rather than partial
 - `impl RangeBounds` for `Eq`
   - `Eq` makes sense for `N` for not as a range-type as whole
+- Use `From`
+  - For each range type, add `impl<'r, T> From<&'r Range> for (Bound<&'r T>, Bound<&'r T>)`
+  - For each range type, add `impl<'r, usize> From<&'r usize> for (Bound<&'r usize>, Bound<&'r usize>)`
+  - Seems overkill since `trait RangeBounds` acts very similar to a
+    `IntoBounds` (with `(Bound<&T>, Bound(&T>)` being the universal concrete
+    type with `&` since the range API doesn't even assume `Clone`).
 
 # Prior art
 [prior-art]: #prior-art
