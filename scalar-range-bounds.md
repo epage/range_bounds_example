@@ -116,6 +116,7 @@ error[E0277]: the trait bound `i32: fake_std::ops::RangeBounds<usize>` is not sa
 29 |     H: RangeBounds<usize>,
    |        ------------------ required by this bound in `many`
 ```
+- Developers can't provide custom `impl`s for their `Ord` types
 - We might not strike the right balance for what types we `impl` for
 
 # Rationale and alternatives
