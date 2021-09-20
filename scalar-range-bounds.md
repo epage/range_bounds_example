@@ -6,7 +6,8 @@
 # Summary
 [summary]: #summary
 
-Allow writing code that can be generic not just over every range type but also integers.
+Add an `impl RangeBounds<T> for T: Ord` to allow writing code that can be
+generic not just over every range type but also integers.
 
 See also
 - [nom's current API](examples/current)
